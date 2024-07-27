@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo1
+      - mongo2
+    environment:
+      - MONGO1_URL=mongodb://mongo1:27017/mongo1-data
+      - MONGO2_URL=mongodb://mongo2:27017/mongo2-data
+
+  mongo1:
+    image: mongo:4.4
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo1-data:/data/db
+
+  mongo2:
+    image: mongo:4.4
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongo2-data:/data/db
+
+volumes:
+  mongo1-data:
+  mongo2-data:
